@@ -37,6 +37,8 @@ export default defineConfig({
 
         actionTimeout: 120000,
         navigationTimeout: 120000,
+        baseURL: process.env.UI_BASE_URL,
+        storageState: 'auth.json'
     },
 
     /* Global setup and teardown configuration */
@@ -52,7 +54,9 @@ export default defineConfig({
     projects: [
         {
             name: 'chromium',
-            use: { ...devices['Desktop Chrome'] },
+            use: { ...devices['Desktop Chrome'],
+                storageState: "auth.json"
+             },
             testMatch: /.*\.spec\.ts/,
         },
     ],

@@ -4,6 +4,8 @@
     "main": "index.js",
     "scripts": {
         "test": "playwright test",
+        "report": "playwright show-report",
+        "test-ui": "playwright test --ui",
         "debug:setup": "playwright test tests/global.setup.ts --project=setup"
     },
     "keywords": [],

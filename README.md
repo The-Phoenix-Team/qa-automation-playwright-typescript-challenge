@@ -2,15 +2,15 @@
 
 ## Coding Challenge Requirements
 
--   Use Playwright for the project.
--   Use TypeScript for the project.
--   Fork this repository so that you can work on it separately.
--   Write tests for https://www.saucedemo.com
--   Work out a way to make logins fluid/reusable when testing features on and/or after the login page.
--   Lead the path on what should be tested and how it should be tested.
--   There's not a requirement to write tests for all features. The goal is to show the team how you can adapt and create. We'll be checking for best practices generally and how you think when working through new Playwright tests.
--   To complete the challenge, submit a pull request from your fork to this repository, main branch.
--   Have fun! 🎉
+- Use Playwright for the project.
+- Use TypeScript for the project.
+- Fork this repository so that you can work on it separately.
+- Write tests for https://www.saucedemo.com
+- Work out a way to make logins fluid/reusable when testing features on and/or after the login page.
+- Lead the path on what should be tested and how it should be tested.
+- There's not a requirement to write tests for all features. The goal is to show the team how you can adapt and create. We'll be checking for best practices generally and how you think when working through new Playwright tests.
+- To complete the challenge, submit a pull request from your fork to this repository, main branch.
+- Have fun! 🎉
 
 ## Setup
 
@@ -63,6 +63,8 @@ UI_BASE_URL="https://www.saucedemo.com/"
 
 ```
 npx playwright test
+or
+npm run test
 ```
 
 To see results after completion, run:
@@ -83,6 +85,8 @@ npx playwright test --headed
 
 ```
 npx playwright test --ui
+or
+npm run test-ui
 ```
 
 ## Run Single Test
@@ -156,5 +160,5 @@ https://playwright.dev/docs/debug#playwright-inspector
 
 ## Best Practices
 
--   [9 Playwright Best Practices and Pitfalls to Avoid](https://betterstack.com/community/guides/testing/playwright-best-practices/)
--   [https://playwright.dev/docs/best-practices](https://playwright.dev/docs/best-practices)
+- [9 Playwright Best Practices and Pitfalls to Avoid](https://betterstack.com/community/guides/testing/playwright-best-practices/)
+- [https://playwright.dev/docs/best-practices](https://playwright.dev/docs/best-practices)
