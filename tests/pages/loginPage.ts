@@ -16,7 +16,7 @@ export class LoginPage {
     }
 
     async goto(url: string){
-        await this.page.goto(url, {waitUntil: "load", timeout: 1000});
+        await this.page.goto(url, {waitUntil: "load", timeout: 3000});
     }
 
     async login(url: string, username: string, password: string){

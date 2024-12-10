@@ -31,4 +31,8 @@ export class Inventory {
             timeout: 5000
         })
     }
+
+    async selectShoppingCart(){
+        await this.shoppingCart.click();
+    }
 }

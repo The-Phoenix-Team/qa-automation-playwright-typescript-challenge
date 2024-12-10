@@ -134,6 +134,31 @@ npx playwright codegen --ignore-https-errors http://localhost:3000
 More cool commands:
 [https://playwright.dev/docs/running-tests](https://playwright.dev/docs/running-tests)
 
+## How to use .env for this project
+
+1. Create copy.
+   - Locate the .env.example file in the project directory and make a copy of it. Rename the copy to ".env"
+2. Add user credentials.
+   - In your newly created .env file, add usernames and passwords for the three users.
+
+Additional Notes:
+
+- Each test will log in with the respective user credentials and save their authentication state in separate .json files (e.g., auth/userOne.json, auth/userTwo.json, etc.).
+- The UI_BASE_URL variable specifies the base URL for the application under test.
+
+## Test Cases Overview
+
+This project includes a small subset of test cases designed for parallel execution across multiple users:
+
+- Login Tests: Validates login functionality for multiple users simultaneously.
+- Inventory Tests: Covers adding/removing items to/from the cart and navigating to the checkout page.
+
+- **Important Note:** Only the standard_user can successfully complete the inventory tests. Other users will fail due to limitations on their accounts.
+
+### Test Suite Scope
+
+This project is **not a full test suite**. It is intended as a starting point to showcase a basic test plan for a coding challenge. The tests included provide visibility into login functionality, basic inventory interactions, and cart operations, but do not cover exhaustive scenarios or edge cases.
+
 ## How To Update Playwright
 
 ```

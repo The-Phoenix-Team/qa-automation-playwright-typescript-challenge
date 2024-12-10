@@ -38,12 +38,12 @@ export default defineConfig({
         actionTimeout: 120000,
         navigationTimeout: 120000,
         baseURL: process.env.UI_BASE_URL,
-        storageState: 'auth.json'
+        
     },
 
     /* Global setup and teardown configuration */
     // This runs once before all tests
-    globalSetup: './tests/global.setup.ts',
+    // globalSetup: './tests/global.setup.ts',
     // This runs once after all tests
     globalTeardown: './tests/global.teardown.ts',
     // Usually 30 seconds is sufficient.
@@ -52,12 +52,18 @@ export default defineConfig({
 
     /* Configure projects for major browsers */
     projects: [
+        {   name: "setup",
+            testMatch: /.*\.setup\.ts/,
+            fullyParallel: true
+        
+        },
         {
             name: 'chromium',
             use: { ...devices['Desktop Chrome'],
-                storageState: "auth.json"
+               
              },
             testMatch: /.*\.spec\.ts/,
+            dependencies: ["setup"],
         },
     ],
 });

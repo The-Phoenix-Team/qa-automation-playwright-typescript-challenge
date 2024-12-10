@@ -12,12 +12,17 @@ async function globalTeardown() {
         ignoreHTTPSErrors: true,
     });
 
-    const filePath = 'auth.json';
+    const authFilePaths = ['auth.json', 'auth/userOne.json', 'auth/userTwo.json', 'auth/userThree.json'];
     try {
 
-        await fs.unlink('auth.json');
-        console.log('Authentication state file, auth.json removed')
-
+        for (const file of authFilePaths){
+        try{
+            await fs.unlink(file);
+            console.log(`Auth state file ${file} removed]`);
+        }catch (error){
+            console.warn(`Failed to remove ${file}: `, error.message)
+        }
+     }
     } catch (error) {
         console.error('Error in global teardown:', error);
     } finally {

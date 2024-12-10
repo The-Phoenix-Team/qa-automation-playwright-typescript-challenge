@@ -46,9 +46,6 @@ async function globalSetup() {
         }
 
         const loginPage = new LoginPage(page);
-        
-        console.log('Navigating to page...')
-        await loginPage.goto(baseUrl);
 
         console.log(`Logging in as ${userType}...`);
         await loginPage.login(baseUrl, userCredentials.username, userCredentials.password);
