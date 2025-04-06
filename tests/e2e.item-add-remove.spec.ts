@@ -27,7 +27,7 @@ test.describe("E2E - Can add and remove items from cart", () => {
     await productsPage.removeItemFromCartByName("remove-bike-light");
     await productsPage.addItemToCartByName("backpack");
     await productsPage.addItemToCartByName("bike-light");
-    await productsPage.addItemToCartByName("bolt-t-shirt");
+    await productsPage.addItemToCartByName("fleece-jacket");
 
     await productsPage.goToCart();
 
