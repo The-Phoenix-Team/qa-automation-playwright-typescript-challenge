@@ -1,9 +1,9 @@
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../pages/loginPage";
-import { ProductsPage } from "../pages/productsPage";
-import { CartPage } from "../pages/cartPage";
-import { CheckoutPage } from "../pages/checkoutPage";
-import { reusableLogin } from "../utils/reusable-login";
+import { LoginPage } from "../../pages/loginPage";
+import { ProductsPage } from "../../pages/productsPage";
+import { CartPage } from "../../pages/cartPage";
+import { CheckoutPage } from "../../pages/checkoutPage";
+import { reusableLogin } from "../../utils/reusable-login";
 
 test.describe("E2E - User can purchase 1 item", () => {
   test("1 item", async ({ page }) => {
