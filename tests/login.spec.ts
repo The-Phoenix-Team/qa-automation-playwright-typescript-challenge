@@ -7,7 +7,7 @@ Ideally we should read data from files like utils/test-data.ts
 to reflect different login scenario
 */
 export const base_url = process.env.UI_BASE_URL || "https://www.saucedemo.com";
-export const username = process.env.UI_USER || "standard_user";
+export const username = process.env.UI_USERNAME || "standard_user";
 export const password = process.env.UI_PASSWORD || "secret_sauce";
 
 // Step 1: Login, vals should come from ENV var
