@@ -21,6 +21,21 @@ test.describe("Different login tests ", () => {
     await expect(page).toHaveURL(/inventory.html/);
   });
 
+  test("successful log in and logout test", async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    await loginPage.goto(base_url);
+    await loginPage.login(username, password);
+    // Verify successful login
+    await expect(page).toHaveURL(/inventory.html/);
+    // Go to header and click logout
+    await page.locator("#react-burger-menu-btn").click();
+    await page.locator("#logout_sidebar_link").click();
+    // Verify successful logout
+    await expect(page).toHaveURL(base_url);
+    // Expect a title "to contain" a substring.
+    await expect(page).toHaveTitle("Swag Labs");
+  });
+
   test("locked-out user unsuccessful login test", async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto(base_url);
