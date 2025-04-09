@@ -17,6 +17,13 @@ test.describe("Login Scenarios - All User Types", () => {
         expect(errorMsg).toContain("Sorry, this user has been locked out.");
       } else {
         await expect(page).toHaveURL(/inventory\.html/);
+        // Go to header and click logout
+        await page.locator("#react-burger-menu-btn").click();
+        await page.locator("#logout_sidebar_link").click();
+        // Verify successful logout
+        await expect(page).toHaveURL(base_url);
+        // Expect a title "to contain" a substring.
+        await expect(page).toHaveTitle("Swag Labs");
       }
     });
   });
