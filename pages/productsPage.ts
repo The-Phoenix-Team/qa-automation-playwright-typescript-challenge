@@ -1,4 +1,4 @@
-import { BasePage } from "./basePage";
+import { BasePage } from "./BasePage";
 import { itemLocators } from "../utils/products-data";
 import { removeItemLocators } from "../utils/products-data";
 

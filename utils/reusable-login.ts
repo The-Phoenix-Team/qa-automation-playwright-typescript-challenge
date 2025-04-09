@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import { LoginPage } from "../pages/loginPage";
+import { LoginPage } from "../pages/LoginPage";
 
 export const base_url = process.env.UI_BASE_URL || "https://www.saucedemo.com";
 export const username = process.env.UI_USER || "standard_user";

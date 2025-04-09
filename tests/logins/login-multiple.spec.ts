@@ -1,6 +1,6 @@
 // tests/login-multiple.spec.ts
 import { test, expect } from "@playwright/test";
-import { LoginPage } from "../../pages/loginPage";
+import { LoginPage } from "../../pages/LoginPage";
 import { users } from "../../utils/test-data";
 
 const base_url = process.env.UI_BASE_URL || "https://www.saucedemo.com";

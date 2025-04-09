@@ -1,5 +1,5 @@
 import { test as base } from "@playwright/test";
-import { LoginPage } from "../pages/loginPage";
+import { LoginPage } from "../pages/LoginPage";
 
 // One way to make Login Reusable, chnage to read from ENV vars
 
