@@ -25,6 +25,17 @@ export class CheckoutPage extends BasePage {
     await this.page.click(this.continueButton);
   }
 
+  // Added later for storage state, ideally should have one method only
+  async fillCheckoutInfo(
+    firstName: string,
+    lastName: string,
+    postalCode: string
+  ) {
+    await this.page.fill('[data-test="firstName"]', firstName);
+    await this.page.fill('[data-test="lastName"]', lastName);
+    await this.page.fill('[data-test="postalCode"]', postalCode);
+    await this.page.click('[data-test="continue"]');
+  }
   async finishCheckout() {
     await this.page.click(this.finishButton);
   }

@@ -41,6 +41,7 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
 
+    baseURL: process.env.UI_BASE_URL,
     // Don't stop loading the website due to self-signed security certificates
     ignoreHTTPSErrors: process.env.IGNORE_HTTP_ERRORS ? true : false,
 
