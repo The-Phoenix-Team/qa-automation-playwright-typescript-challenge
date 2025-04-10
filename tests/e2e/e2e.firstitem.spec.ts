@@ -6,24 +6,28 @@ import { CheckoutPage } from "../../pages/CheckoutPage";
 import { reusableLogin } from "../../utils/reusable-login";
 
 test.describe("E2E - User can purchase 1st item", () => {
+  test.use({
+    storageState: "storage-state/demo/standard_user.json",
+  });
   test("purchase 1st item", async ({ page }) => {
     // Instantiate Page Objects
     const loginPage = new LoginPage(page);
     const productsPage = new ProductsPage(page);
     const cartPage = new CartPage(page);
     const checkoutPage = new CheckoutPage(page);
-    const URL = process.env.UI_BASE_URL || "https://www.saucedemo.com";
-    const USER = process.env.UI_USER || "standard_user";
-    const PASSWORD = process.env.UI_PASSWORD || "secret_sauce";
+    // const URL = process.env.UI_BASE_URL || "https://www.saucedemo.com";
+    // const USER = process.env.UI_USER || "standard_user";
+    // const PASSWORD = process.env.UI_PASSWORD || "secret_sauce";
 
     // Step 1: Login
 
-    await reusableLogin(page);
+    // await reusableLogin(page);
 
     // Verify successful login
-    await expect(page).toHaveURL(/inventory.html/);
+    // await expect(page).toHaveURL(/inventory.html/);
 
     // Step 2: Add first item or just 1 item to cart
+    await page.goto("https://www.saucedemo.com/inventory.html");
     await productsPage.addFirstItemToCart(); // This is just a quick way to see
 
     //await productsPage.addItemToCartByName("backpack"); // Ideally we should use this type of method

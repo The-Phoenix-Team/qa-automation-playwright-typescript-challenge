@@ -5,7 +5,7 @@
       "value": "performance_glitch_user",
       "domain": "www.saucedemo.com",
       "path": "/",
-      "expires": 1744238760,
+      "expires": 1744260782,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -17,11 +17,11 @@
       "localStorage": [
         {
           "name": "backtrace-guid",
-          "value": "9d19f6ef-c069-48ee-bd61-bb2e01e8424a"
+          "value": "0ad43c7a-6c24-414e-9d1f-e04692351952"
         },
         {
           "name": "backtrace-last-active",
-          "value": "1744238160513"
+          "value": "1744260181991"
         }
       ]
     }

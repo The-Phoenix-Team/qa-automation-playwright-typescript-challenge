@@ -6,6 +6,9 @@ import { CheckoutPage } from "../../pages/CheckoutPage";
 import { reusableLogin } from "../../utils/reusable-login";
 
 test.describe("E2E - User can purchase 2 items", () => {
+  test.use({
+    storageState: "storage-state/demo/standard_user.json",
+  });
   test("2 items", async ({ page }) => {
     // Instantiate Page Objects
     const loginPage = new LoginPage(page);
@@ -14,9 +17,10 @@ test.describe("E2E - User can purchase 2 items", () => {
     const checkoutPage = new CheckoutPage(page);
 
     // Step 1: Login
-    await reusableLogin(page);
+    //await reusableLogin(page);
 
     // Verify successful login
+    await page.goto("https://www.saucedemo.com/inventory.html");
     await expect(page).toHaveURL(/inventory.html/);
 
     // Step 2: Add 2 item2 to cart

@@ -5,7 +5,13 @@ import { CartPage } from "../../pages/CartPage";
 import { CheckoutPage } from "../../pages/CheckoutPage";
 import { reusableLogin } from "../../utils/reusable-login";
 
+test.use({
+  storageState: "storage-state/demo/standard_user.json",
+});
 test.describe("E2E - User can purchase 1 item", () => {
+  test.use({
+    storageState: "storage-state/demo/standard_user.json",
+  });
   test("1 item", async ({ page }) => {
     // Instantiate Page Objects
     const loginPage = new LoginPage(page);
@@ -14,8 +20,9 @@ test.describe("E2E - User can purchase 1 item", () => {
     const checkoutPage = new CheckoutPage(page);
 
     // Step 1: Login, vals should come from ENV var
-    await reusableLogin(page);
+    //await reusableLogin(page);
     // Verify successful login
+    await page.goto("https://www.saucedemo.com/inventory.html");
     await expect(page).toHaveURL(/inventory.html/);
 
     // Step 2: Add 1 item by name to cart

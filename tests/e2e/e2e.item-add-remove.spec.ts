@@ -7,6 +7,9 @@ import { reusableLogin } from "../../utils/reusable-login";
 
 //This needs work
 test.describe("E2E - Can add and remove items from cart", () => {
+  test.use({
+    storageState: "storage-state/demo/standard_user.json",
+  });
   test("Purchase 3 items", async ({ page }) => {
     // Instantiate Page Objects
     const loginPage = new LoginPage(page);
@@ -15,9 +18,10 @@ test.describe("E2E - Can add and remove items from cart", () => {
     const checkoutPage = new CheckoutPage(page);
 
     // Step 1: Login
-    await reusableLogin(page);
+    //await reusableLogin(page);
 
     // Verify successful login
+    await page.goto("https://www.saucedemo.com/inventory.html");
     await expect(page).toHaveURL(/inventory.html/);
 
     // Step 2: Add 2 items to cart, remove them and add them again
