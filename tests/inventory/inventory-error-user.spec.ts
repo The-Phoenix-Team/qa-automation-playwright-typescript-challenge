@@ -1,4 +1,3 @@
-// tests/e2e/inventory-error-user.spec.ts
 import { test, expect } from "../../utils/custom-fixtures";
 import { InventoryPage } from "../../pages/InventoryPage";
 
