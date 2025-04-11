@@ -1,8 +1,8 @@
 import { test, expect } from "@playwright/test";
 import { LoginPage } from "../../pages/LoginPage";
 import { ProductsPage } from "../../pages/ProductsPage";
-import { CartPage } from "../../pages/CartPage";
-import { CheckoutPage } from "../../pages/CheckoutPage";
+import { CartPage } from "../../pages/cartPage";
+import { CheckoutPage } from "../../pages/checkoutPage";
 import { reusableLogin } from "../../utils/reusable-login";
 
 test.describe("E2E - User can purchase 1 item", () => {
@@ -12,6 +12,7 @@ test.describe("E2E - User can purchase 1 item", () => {
     const productsPage = new ProductsPage(page);
     const cartPage = new CartPage(page);
     const checkoutPage = new CheckoutPage(page);
+    const URL = process.env.UI_BASE_URL || "https://www.saucedemo.com";
 
     // Step 1: Login, vals should come from ENV var
     await reusableLogin(page);

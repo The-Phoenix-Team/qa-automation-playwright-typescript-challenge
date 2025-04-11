@@ -4,24 +4,88 @@ import { expectedProducts } from "../utils/test-data";
 
 export class InventoryPage extends BasePage {
   async gotoInventory() {
+    //await this.page.goto("https://www.saucedemo.com/inventory.html");
     await this.page.goto("/inventory.html");
   }
 
   async verifyOnInventoryPage() {
     //await this.page.expectURL('/inventory.html');
-    await expect(this.page.locator(".inventory_list")).toBeVisible();
+    //await this.page.goto("https://www.saucedemo.com/inventory.html");
+    //await this.page.getByText("Name (A to Z)").selectOption("az");
+    await this.page
+      .locator('[data-test="product-sort-container"]')
+      .selectOption("az");
+
+    //await expect(this.page.locator(".inventory_list")).toBeVisible();
+    await this.page
+      .locator('[data-test="product-sort-container"]')
+      .selectOption("az");
   }
 
+  ////*[@id="header_container"]/div[2]/div/span/select
+  // #header_container > div.header_secondary_container > div > span > select
+
+  // async sortBy(option: "az" | "za" | "lohi" | "hilo") {
+  //   // Just to make sure it can be clicked
+  //   // await this.page
+  //   //   .locator('[data-test="product-sort-container"]')
+  //   //   .selectOption("az");
+  //   await this.page.getByText("Name (A to Z)").click();
+  //   const sortMap = {
+  //     az: "Name (A to Z)",
+  //     za: "Name (Z to A)",
+  //     lohi: "Price (low to high)",
+  //     hilo: "Price (high to low)",
+  //   };
+  //   await this.page
+  //     .locator('[data-test="product_sort_container"]')
+  //     .selectOption({ label: sortMap[option] });
+  // }
+  // async sortBy(option: "az" | "za" | "lohi" | "hilo") {
+  //   const sortMap = {
+  //     az: "Name (A to Z)",
+  //     za: "Name (Z to A)",
+  //     lohi: "Price (low to high)",
+  //     hilo: "Price (high to low)",
+  //   };
+
+  //   const label = sortMap[option];
+  //   if (!label) throw new Error(`Invalid sort option: "${option}"`);
+
+  //   const sortDropdown = this.page.locator(
+  //     '[data-test="product_sort_container"]'
+  //   );
+  //   await expect(sortDropdown).toBeVisible();
+  //   await sortDropdown.selectOption({ label });
+  // }
+
+  // async sortBy(option: "az" | "za" | "lohi" | "hilo") {
+  //   const sortMap = {
+  //     az: "Name (A to Z)",
+  //     za: "Name (Z to A)",
+  //     lohi: "Price (low to high)",
+  //     hilo: "Price (high to low)",
+  //   };
+
+  //   const label = sortMap[option];
+  //   if (!label) throw new Error(`Invalid sort option: "${option}"`);
+
+  //   const dropdown = this.page.locator('[data-test="product_sort_container"]');
+  //   await expect(dropdown).toBeVisible();
+  //   await dropdown.selectOption({ label }); // ✅ This works reliably
+  // }
+  //
+
   async sortBy(option: "az" | "za" | "lohi" | "hilo") {
-    const sortMap = {
-      az: "Name (A to Z)",
-      za: "Name (Z to A)",
-      lohi: "Price (low to high)",
-      hilo: "Price (high to low)",
-    };
-    await this.page
-      .locator('[data-test="product_sort_container"]')
-      .selectOption({ label: sortMap[option] });
+    await this.page.getByText("Name (A to Z)Name (A to Z)").click();
+    // await this.page.locator('[data-test="product-sort-container"]').selectOption('za');
+    // await this.page.locator('[data-test="product-sort-container"]').selectOption('lohi');
+    // await this.page.locator('[data-test="product-sort-container"]').selectOption('za');
+    // await this.page.locator('[data-test="product-sort-container"]').selectOption('hilo');
+
+    const dropdown = this.page.locator('[data-test="product-sort-container"]');
+    await expect(dropdown).toBeVisible();
+    await dropdown.selectOption(option); // values: az, za, lohi, hilo
   }
 
   async verifyProductDataMatches() {
