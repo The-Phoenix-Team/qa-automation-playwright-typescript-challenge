@@ -1,4 +1,8 @@
+// ✅ pages/CheckoutPage.ts
+// Checkout Page Object to complete customer checkout flows
+import { expect } from "@playwright/test";
 import { BasePage } from "./BasePage";
+import { ProductType } from "../utils/types";
 
 export class CheckoutPage extends BasePage {
   private firstNameInput = "[data-test='firstName']";
@@ -7,57 +11,70 @@ export class CheckoutPage extends BasePage {
   private continueButton = "[data-test='continue']";
   private finishButton = "[data-test='finish']";
   private orderCompleteMessage = ".complete-header";
-  private backHomeButton = "[data-test='back-to-products']"; // Back Home button on checkout-complete.html
+  private backHomeButton = "[data-test='back-to-products']";
+  private checkoutCompleteText = '[data-test="secondary-header"]';
 
-  // All menu items should go on a separate menuPage.ts
-  private checkoutComepleteText = '[data-test="secondary-header"]';
-  private openMenu = "button"; // Need work TBD
-  private logoutButton = '[data-test="logout-sidebar-link"]';
-
-  async fillCheckoutDetails(
-    firstName: string,
-    lastName: string,
-    postalCode: string
-  ) {
-    await this.page.fill(this.firstNameInput, firstName);
-    await this.page.fill(this.lastNameInput, lastName);
-    await this.page.fill(this.postalCodeInput, postalCode);
+  // Fill and submit checkout information form
+  async fillCheckoutForm(first: string, last: string, zip: string) {
+    await this.page.fill(this.firstNameInput, first);
+    await this.page.fill(this.lastNameInput, last);
+    await this.page.fill(this.postalCodeInput, zip);
     await this.page.click(this.continueButton);
   }
 
-  // Added later for storage state, ideally should have one method only
-  async fillCheckoutInfo(
-    firstName: string,
-    lastName: string,
-    postalCode: string
-  ) {
-    await this.page.fill('[data-test="firstName"]', firstName);
-    await this.page.fill('[data-test="lastName"]', lastName);
-    await this.page.fill('[data-test="postalCode"]', postalCode);
-    await this.page.click('[data-test="continue"]');
-  }
+  // Finish the checkout
   async finishCheckout() {
     await this.page.click(this.finishButton);
   }
 
-  getOrderConfirmation() {
-    return this.page.locator(this.orderCompleteMessage);
+  // Get the order confirmation message after success
+  async getConfirmationMessage() {
+    return await this.page.locator(this.orderCompleteMessage).textContent();
   }
 
-  getBackHomeButton() {
-    return this.page.locator(this.backHomeButton);
+  // Get the error message on checkout failure
+  async getErrorMessage() {
+    return await this.page.locator('[data-test="error"]').textContent();
   }
 
-  clickBackHome() {
-    this.page.click(this.backHomeButton);
+  // Validate total item amount matches expected
+  async verifyItemTotal(products: ProductType[]) {
+    const expectedTotal = products.reduce(
+      (sum, p) => sum + parseFloat(p.price.replace("$", "")),
+      0
+    );
+    const itemTotalText = await this.page
+      .locator(".summary_subtotal_label")
+      .textContent();
+    const actual = parseFloat(itemTotalText?.split("$")[1] || "0");
+    expect(actual).toBeCloseTo(expectedTotal, 2);
   }
 
-  getCheckoutCompleteText() {
-    return this.page.locator(this.checkoutComepleteText);
+  // Validate calculated tax value is accurate
+  async verifyTax(expectedRate = 0.08) {
+    const subtotalText = await this.page
+      .locator(".summary_subtotal_label")
+      .textContent();
+    const taxText = await this.page.locator(".summary_tax_label").textContent();
+    const subtotal = parseFloat(subtotalText?.split("$")[1] || "0");
+    const actualTax = parseFloat(taxText?.split("$")[1] || "0");
+    const expectedTax = +(subtotal * expectedRate).toFixed(2);
+    expect(actualTax).toBeCloseTo(expectedTax, 2);
   }
 
-  logout() {
-    this.page.click(this.openMenu);
-    this.page.click(this.logoutButton);
+  // Validate final total = item total + tax
+  async verifyTotalAmount() {
+    const totalText = await this.page
+      .locator(".summary_total_label")
+      .textContent();
+    const displayedTotal = parseFloat(totalText?.split("$")[1] || "0");
+    const subtotalText = await this.page
+      .locator(".summary_subtotal_label")
+      .textContent();
+    const taxText = await this.page.locator(".summary_tax_label").textContent();
+    const subtotal = parseFloat(subtotalText?.split("$")[1] || "0");
+    const tax = parseFloat(taxText?.split("$")[1] || "0");
+    const expectedTotal = +(subtotal + tax).toFixed(2);
+    expect(displayedTotal).toBeCloseTo(expectedTotal, 2);
   }
 }

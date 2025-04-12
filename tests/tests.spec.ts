@@ -8,10 +8,5 @@ test.describe("Just load login page", () => {
     // Have fun! 🎉
     const loginPage = new LoginPage(page);
     await loginPage.goto(base_url);
-    //await loginPage.goto("https://www.saucedemo.com");
-    //await loginPage.login("standard_user", "secret_sauce");
-    //expect(await page.url()).toBe("https://www.saucedemo.com/inventory.html");
-    //TEMP: force a fail
-    //expect(false).toBeTruthy();
   });
 });

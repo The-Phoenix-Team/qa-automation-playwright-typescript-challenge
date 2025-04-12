@@ -1,97 +1,39 @@
+// ✅ pages/InventoryPage.ts
+// Inventory Page Object to interact with product list and cart actions
 import { expect } from "@playwright/test";
 import { BasePage } from "./BasePage";
-import { expectedProducts } from "../utils/test-data";
+import { products } from "../utils/test-data-driven";
 
 export class InventoryPage extends BasePage {
+  // Navigate to inventory.html
   async gotoInventory() {
-    //await this.page.goto("https://www.saucedemo.com/inventory.html");
     await this.page.goto("/inventory.html");
   }
 
-  async verifyOnInventoryPage() {
-    //await this.page.expectURL('/inventory.html');
-    //await this.page.goto("https://www.saucedemo.com/inventory.html");
-    //await this.page.getByText("Name (A to Z)").selectOption("az");
-    await this.page
-      .locator('[data-test="product-sort-container"]')
-      .selectOption("az");
-
-    //await expect(this.page.locator(".inventory_list")).toBeVisible();
-    await this.page
-      .locator('[data-test="product-sort-container"]')
-      .selectOption("az");
+  // Add item to cart using ID
+  async addItemToCartById(id: string) {
+    const btn = this.page.locator(`[data-test="add-to-cart-${id}"]`);
+    await expect(btn).toBeVisible();
+    await btn.click();
   }
 
-  ////*[@id="header_container"]/div[2]/div/span/select
-  // #header_container > div.header_secondary_container > div > span > select
-
-  // async sortBy(option: "az" | "za" | "lohi" | "hilo") {
-  //   // Just to make sure it can be clicked
-  //   // await this.page
-  //   //   .locator('[data-test="product-sort-container"]')
-  //   //   .selectOption("az");
-  //   await this.page.getByText("Name (A to Z)").click();
-  //   const sortMap = {
-  //     az: "Name (A to Z)",
-  //     za: "Name (Z to A)",
-  //     lohi: "Price (low to high)",
-  //     hilo: "Price (high to low)",
-  //   };
-  //   await this.page
-  //     .locator('[data-test="product_sort_container"]')
-  //     .selectOption({ label: sortMap[option] });
-  // }
-  // async sortBy(option: "az" | "za" | "lohi" | "hilo") {
-  //   const sortMap = {
-  //     az: "Name (A to Z)",
-  //     za: "Name (Z to A)",
-  //     lohi: "Price (low to high)",
-  //     hilo: "Price (high to low)",
-  //   };
-
-  //   const label = sortMap[option];
-  //   if (!label) throw new Error(`Invalid sort option: "${option}"`);
-
-  //   const sortDropdown = this.page.locator(
-  //     '[data-test="product_sort_container"]'
-  //   );
-  //   await expect(sortDropdown).toBeVisible();
-  //   await sortDropdown.selectOption({ label });
-  // }
-
-  // async sortBy(option: "az" | "za" | "lohi" | "hilo") {
-  //   const sortMap = {
-  //     az: "Name (A to Z)",
-  //     za: "Name (Z to A)",
-  //     lohi: "Price (low to high)",
-  //     hilo: "Price (high to low)",
-  //   };
-
-  //   const label = sortMap[option];
-  //   if (!label) throw new Error(`Invalid sort option: "${option}"`);
-
-  //   const dropdown = this.page.locator('[data-test="product_sort_container"]');
-  //   await expect(dropdown).toBeVisible();
-  //   await dropdown.selectOption({ label }); // ✅ This works reliably
-  // }
-  //
-
-  async sortBy(option: "az" | "za" | "lohi" | "hilo") {
-    await this.page.getByText("Name (A to Z)Name (A to Z)").click();
-    // await this.page.locator('[data-test="product-sort-container"]').selectOption('za');
-    // await this.page.locator('[data-test="product-sort-container"]').selectOption('lohi');
-    // await this.page.locator('[data-test="product-sort-container"]').selectOption('za');
-    // await this.page.locator('[data-test="product-sort-container"]').selectOption('hilo');
-
-    const dropdown = this.page.locator('[data-test="product-sort-container"]');
-    await expect(dropdown).toBeVisible();
-    await dropdown.selectOption(option); // values: az, za, lohi, hilo
+  // Remove item from cart using ID
+  async removeItemFromCartById(id: string) {
+    const btn = this.page.locator(`[data-test="remove-${id}"]`);
+    await expect(btn).toBeVisible();
+    await btn.click();
   }
 
+  // Navigate to cart from header
+  async goToCart() {
+    await this.page.click(".shopping_cart_link");
+  }
+
+  // Verify product cards on page match expected data
   async verifyProductDataMatches() {
     const items = this.page.locator(".inventory_item");
     const count = await items.count();
-    expect(count).toBe(expectedProducts.length);
+    expect(count).toBe(Object.keys(products).length);
 
     for (let i = 0; i < count; i++) {
       const item = items.nth(i);
@@ -102,66 +44,14 @@ export class InventoryPage extends BasePage {
         .locator(".inventory_item_img img")
         .getAttribute("src");
 
-      const expected = expectedProducts.find((p) => p.name === name);
+      const expected = Object.values(products).find((p) => p.name === name);
       expect(
         expected,
         `Missing product in expected data: ${name}`
       ).toBeDefined();
       expect(desc).toBe(expected!.description);
       expect(price).toBe(expected!.price);
-      expect(img).toContain(expected!.image);
+      expect(img).toContain(expected!.imageSrc);
     }
-  }
-
-  async addToCartById(id: string) {
-    const addBtn = this.page.locator(`[data-test="add-to-cart-${id}"]`);
-    await expect(addBtn).toBeVisible();
-    await addBtn.click();
-  }
-
-  async removeFromCartById(id: string) {
-    const removeBtn = this.page.locator(`[data-test="remove-${id}"]`);
-    await expect(removeBtn).toBeVisible();
-    await removeBtn.click();
-  }
-
-  async isInCart(id: string): Promise<boolean> {
-    return this.page.locator(`[data-test="remove-${id}"]`).isVisible();
-  }
-
-  async verifySortingWorksCorrectly(type: "az" | "za" | "lohi" | "hilo") {
-    const products = this.page.locator(".inventory_item");
-    const count = await products.count();
-
-    const items: { name: string; price: number }[] = [];
-
-    for (let i = 0; i < count; i++) {
-      const item = products.nth(i);
-      const name = await item.locator(".inventory_item_name").innerText();
-      const priceText = await item.locator(".inventory_item_price").innerText();
-      const price = parseFloat(priceText.replace("$", ""));
-      items.push({
-        name: name,
-        price: price,
-      });
-    }
-
-    let sorted: unknown;
-    switch (type) {
-      case "az":
-        sorted = [...items].sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case "za":
-        sorted = [...items].sort((a, b) => b.name.localeCompare(a.name));
-        break;
-      case "lohi":
-        sorted = [...items].sort((a, b) => a.price - b.price);
-        break;
-      case "hilo":
-        sorted = [...items].sort((a, b) => b.price - a.price);
-        break;
-    }
-
-    expect(items).toEqual(sorted);
   }
 }
