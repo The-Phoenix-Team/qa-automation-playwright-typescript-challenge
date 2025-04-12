@@ -1,5 +1,11 @@
 // ✅ utils/test-data-driven.ts
-import { UserType, ProductType, PaymentType, UserScenario } from "./types";
+import {
+  UserType,
+  ProductType,
+  PaymentType,
+  UserScenario,
+  LoginScenario,
+} from "./types";
 
 // FOLLWOING LINES are active at the end of the file!!
 // Alias exports for test usage at the end of this file,
@@ -68,7 +74,27 @@ export const products: Record<string, ProductType> = {
   },
 };
 
+export const loginscenarios: LoginScenario[] = [
+  {
+    scenarioName: "Standard user completes login",
+    user: users["standard_user"],
+    expectedOutcome: "success",
+  },
+  {
+    scenarioName: "Locked out user fails login",
+    user: users["locked_out_user"],
+    expectedOutcome: "failure",
+  },
+];
+
 export const scenarios: UserScenario[] = [
+  {
+    scenarioName: "Standard user completes ",
+    user: users["standard_user"],
+    cartItems: ["sauce-labs-backpack"],
+    payment: payments["valid_1"],
+    expectedOutcome: "success",
+  },
   {
     scenarioName: "Standard user completes checkout",
     user: users["standard_user"],
