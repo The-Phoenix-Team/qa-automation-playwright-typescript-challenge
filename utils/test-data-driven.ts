@@ -85,20 +85,25 @@ export const loginscenarios: LoginScenario[] = [
     user: users["locked_out_user"],
     expectedOutcome: "failure",
   },
+  {
+    scenarioName: "Locked out user fails login",
+    user: users["wrong_user"],
+    expectedOutcome: "failure",
+  },
 ];
 
 export const scenarios: UserScenario[] = [
   {
-    scenarioName: "Standard user completes ",
+    scenarioName: "Standard user completes checkout 1 item(s)",
     user: users["standard_user"],
     cartItems: ["sauce-labs-backpack"],
     payment: payments["valid_1"],
     expectedOutcome: "success",
   },
   {
-    scenarioName: "Standard user completes checkout",
+    scenarioName: "Standard user completes checkout 2 item(s)",
     user: users["standard_user"],
-    cartItems: ["sauce-labs-backpack"],
+    cartItems: ["sauce-labs-backpack", "sauce-labs-bike-light"],
     payment: payments["valid_1"],
     expectedOutcome: "success",
   },
@@ -110,18 +115,19 @@ export const scenarios: UserScenario[] = [
     expectedOutcome: "failure",
   },
   {
-    scenarioName: "Standard user adds 3 items and checks out",
+    scenarioName: "Standard user adds 4 items and checks out",
     user: users["standard_user"],
     cartItems: [
       "sauce-labs-backpack",
       "sauce-labs-bike-light",
       "sauce-labs-bolt-t-shirt",
+      "sauce-labs-fleece-jacket",
     ],
     payment: payments["valid_2"],
     expectedOutcome: "success",
   },
   {
-    scenarioName: "Edge Case: Standard user adds all items and checks out",
+    scenarioName: "Edge Case: Standard user adds 6 items and checks out",
     user: users["standard_user"],
     cartItems: [
       "sauce-labs-backpack",
@@ -129,7 +135,6 @@ export const scenarios: UserScenario[] = [
       "sauce-labs-bolt-t-shirt",
       "sauce-labs-fleece-jacket",
       "sauce-labs-onesie",
-      "test.allthethings()-t-shirt-(red)",
     ],
     payment: payments["valid_2"],
     expectedOutcome: "success",
