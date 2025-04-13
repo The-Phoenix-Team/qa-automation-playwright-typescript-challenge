@@ -1,21 +1,21 @@
 {
-    "name": "playwrightdemo",
-    "version": "1.0.0",
-    "main": "index.js",
-    "scripts": {
-        "test": "playwright test",
-        "debug:setup": "playwright test tests/global.setup.ts --project=setup"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "description": "",
-    "devDependencies": {
-        "@playwright/test": "^1.47.1",
-        "@types/node": "^22.5.5"
-    },
-    "dependencies": {
-        "dotenv": "^16.4.5",
-        "@faker-js/faker": "^8.0.0"
-    }
+  "name": "playwrightdemo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "debug:setup": "playwright test tests/global.setup.ts --project=setup"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.51.1",
+    "@types/node": "^22.5.5"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^8.0.0",
+    "dotenv": "^16.4.7"
+  }
 }
