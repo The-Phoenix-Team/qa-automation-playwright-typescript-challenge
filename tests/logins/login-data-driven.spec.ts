@@ -17,9 +17,7 @@ for (let i = 0; i < loginscenarios.length; i++) {
     const loginPage = new LoginPage(page);
     await page.goto("/");
     //await page.goto(baseURL);
-    console.log(
-      `🔐 Running login scenario: ${scenario.scenarioName} for ${scenario.user.username}`
-    );
+    console.log(`🔐 Running login scenario: ${scenario.scenarioName} `);
 
     await loginPage.login(scenario.user.username, scenario.user.password);
 

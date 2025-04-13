@@ -8,10 +8,11 @@ import { scenarioConfig, productConfig } from "../../utils/test-data-driven";
 /**
  * Data-driven E2E checkout flow using UserScenario[] and storageState for login reuse
  */
+const env = process.env.ENV_NAME || "demo";
 
 for (let i = 0; i < scenarioConfig.length; i++) {
   const scenario = scenarioConfig[i];
-  const sessionFile = `storage/${scenario.user.username}.json`;
+  const sessionFile = `storage-state/${env}/${scenario.user.username}.json`;
 
   test.use({ storageState: sessionFile });
 

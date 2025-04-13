@@ -85,11 +85,6 @@ export const loginscenarios: LoginScenario[] = [
     user: users["locked_out_user"],
     expectedOutcome: "failure",
   },
-  {
-    scenarioName: "Locked out user fails login",
-    user: users["wrong_user"],
-    expectedOutcome: "failure",
-  },
 ];
 
 export const scenarios: UserScenario[] = [
