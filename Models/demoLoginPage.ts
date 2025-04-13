@@ -21,12 +21,12 @@ export class SwagLabsLoginPage {
     private _loginBtnLoc:Locator // Login action either error or to Product Page
 
     // expected text fields
-    readonly expTitleText:String;
-    readonly expUserPlace:String;
-    readonly expPassPlace:String;
-    readonly expBtnText:String;
+    private readonly _expTitleText:String;
+    private readonly _expUserPlace:String;
+    private readonly _expPassPlace:String;
+    private readonly _expBtnText:String;
 
-    constructor(page: Page, baseURL) {
+    constructor(page: Page, baseURL:String | undefined) {
         this.page = page;
 
         this._baseURL = baseURL;
@@ -42,10 +42,10 @@ export class SwagLabsLoginPage {
         this._loginBtnLoc = page.locator('input[data-test="login-button"]');
 
         // expected text values
-        this.expTitleText = "Swag Labs";
-        this.expUserPlace = "Username";
-        this.expPassPlace = "Password";
-        this.expBtnText = "Login";
+        this._expTitleText = "Swag Labs";
+        this._expUserPlace = "Username";
+        this._expPassPlace = "Password";
+        this._expBtnText = "Login";
 
     }
     async goto(debug?:boolean):Promise<void> {
@@ -65,19 +65,19 @@ export class SwagLabsLoginPage {
 
         // check page title text 
         const titleText:string = await this._titleLoc.innerText();
-        expect(titleText).toBe(titleText);
+        expect(titleText).toBe(this._expTitleText);
 
         // check username placeholer
         const userPlaceText = await this._usernameLoc.getAttribute("placeholder")
-        expect(userPlaceText).toBe(this.expUserPlace);
+        expect(userPlaceText).toBe(this._expUserPlace);
 
         // check password placeholder
         const passPlaceText = await this._passwordLoc.getAttribute("placeholder")
-        expect(passPlaceText).toBe(this.expPassPlace);
+        expect(passPlaceText).toBe(this._expPassPlace);
 
         // check login button text
         const btnText = await this._loginBtnLoc.getAttribute("value")
-        expect(btnText).toBe(this.expBtnText);
+        expect(btnText).toBe(this._expBtnText);
      
     }
 
@@ -106,22 +106,29 @@ export class SwagLabsLoginPage {
         return elemText
     }
 
-    async loginAction(expErrMsg:String):Promise<void> {
+    async loginAction(expErrMsg:String):Promise<Boolean> {
         const userValue = await this.getUserValue();
         console.log(`Login ${userValue} attempt`);
         await this._loginBtnLoc.click();
 
-        // when expErrMsg is empty string then success
+        // when expErrMsg is empty string 
+        // then Login Success
+        //  and on Invetory Page
+        //  and return true
         if (expErrMsg === "") {
             const productURL:string = this.page.url();
             expect(productURL).toBe(`${this._baseURL}inventory.html`);
             console.log(`Login ${userValue} to Product-Invetory page`);
-        } else {
-            await this._errMsgLoc.isVisible()
-            const errMsgText = await this._errMsgLoc.innerText();
-            expect(errMsgText).toBe(expErrMsg);
-            console.log(`Login ${userValue} Error`);
+            return true;
         }
+        // else Login Success
+        // check error message
+        // return false
+        await this._errMsgLoc.isVisible()
+        const errMsgText = await this._errMsgLoc.innerText();
+        expect(errMsgText).toBe(expErrMsg);
+        console.log(`Login ${userValue} Error`);
+        return false;
     }
 
 }

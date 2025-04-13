@@ -2,156 +2,41 @@ import { test, expect } from '@playwright/test';
 import { Page,  Locator} from 'playwright';
 
 import { SwagLabsLoginPage } from '../Models/demoLoginPage';
+import { SwagLabsInventoryPage } from '../Models/inventoryProdPage';
 
 test.describe('Complete Work Flow', () => {
-    test.skip('Standard User Checkout Product Logout', async ({ page }) => {
+    test('standard_user Checkout Product Logout', async ({ page }) => {
         
         // Note this has inline locators that will be used to create
         // TODO create Page and Object Models for other tests
         // TODO replace inline locators with Models 
       
         const defaultURL = process.env.UI_BASE_URL;
-        console.log(`URL is ${defaultURL}`);
-        await page.goto(`${defaultURL}`);
-        console.log("Start on Login Page")
-        
-        const loginURL:string = page.url();
-        expect(loginURL).toBe(`${defaultURL}`);
+        const uiPassword = process.env.UI_PASSWORD;
+        const no_debug = false;
 
-        const loginLogoLoc:Locator = page.locator('div.login_logo');
-        await loginLogoLoc.isVisible()
-        const loginLogoText:string = await loginLogoLoc.innerText();
-        expect(loginLogoText).toBe("Swag Labs")
+        const loginPage = new SwagLabsLoginPage(page, defaultURL);
+        await loginPage.goto(no_debug);
 
-        const loginBtnLoc:Locator = page.locator('input#login-button');
-        await loginBtnLoc.isVisible()
-        const buttonText = await loginBtnLoc.getAttribute("value")
-        expect(buttonText).toBe("Login")
-
-        const usernameLoc:Locator = page.locator('input[data-test="username"]');
-        await usernameLoc.fill("standard_user");
-        const userText = await usernameLoc.getAttribute("value")
-        expect(userText).toBe("standard_user");
-
-        const passwordLoc:Locator = page.locator('input[data-test="password"]');
-        await passwordLoc.fill("secret_sauce");
-        const passText = await passwordLoc.getAttribute("value")
-        expect(passText).toBe("secret_sauce");
-
-        await loginBtnLoc.click();
-        const productURL:string = page.url();
-        expect(productURL).toBe(`${defaultURL}inventory.html`);
+        await loginPage.inputUserValue("standard_user");
+        await loginPage.inputPassValue(`${uiPassword}`);
+        let loginSuccess = await loginPage.loginAction("");
+        expect (loginSuccess).toBeTruthy();
         console.log("Then to Product-Invetory page")
-       
-        const productLogoLoc:Locator = page.locator('div.app_logo');
-        await productLogoLoc.isVisible()
-        const productLogoText:string = await productLogoLoc.innerText();
-        expect(productLogoText).toBe("Swag Labs")
+
+        const inventoryPage = new SwagLabsInventoryPage(page, defaultURL);
+        await inventoryPage.checkFields();
+        await inventoryPage.checkCartCount();
 
         const prodCartGroup:Locator = page.locator('div#shopping_cart_container');
-        await prodCartGroup.isVisible();
-       
-        const prodTitleLoc:Locator = page.locator('span[data-test="title"]')
-        await prodTitleLoc.isVisible()
-        const prodTitleText:string = await prodTitleLoc.innerText();
-        expect(prodTitleText).toBe("Products")
-
-        const selOrderGroupLoc:Locator = page.locator('span#select_container');
-        await selOrderGroupLoc.isVisible();
-
-        const selActOptLoc:Locator = page.locator('span#active_option');
-        await selActOptLoc.isVisible();
-        
-        // await selOrderGroupLoc.click();
-        // const selActOptText:string = await selOrderGroupLoc.innerText();
-        // expect(selActOptText).toBe("Products")
-
-        const selOrderActLoc:Locator = page.locator('select#product_sort_container');
-        await selOrderActLoc.isVisible();
-        // await page.selectOption('select#product_sort_container', 'lohi')
-      
-        const invItemListLoc = page.locator('div[data-test="inventory-item"]');
-        const itemCount = await invItemListLoc.count()
-        console.log(`Have ${itemCount} products`);
-        expect(itemCount).toBeGreaterThan(0);
-
-        // Each Inventory Item has
-        // sub-item img via 'img.inventory_item_img'
-        //   with alt value as <product name>
-        // sub-item name via 'div.inventory_item_name ' or 'div[data-test'="inventory-item-name"]'
-        //   with text as <product name>
-        // sub-item desc via 'div.inventory_item_desc' or div[data-test'="inventory-item-desc]
-        //   with text as <product description>
-        // sub-item price via 'div.inventory_item_price 'div[data-test'="inventory-item-desc]'
-        //   with text <product price>
-        // sub-item action via 'button'
-        //    when class has ' btn_primary ' 
-        //    then ready for 'Add to cart' action
-        //     and text is 'Add to cart' 
-        //     and id is 'add-to-cart-<product-name>'
-        //    otherwise class has ' btn_secondary ' 
-        //    then ready for 'Remove' action
-        //      and text is 'Remove'
-        //      and id is 'remove-<product-name>'
-        //      and item is in Cart
-        // 'Add to cart' action does
-        //    add item to cart; increase cart count;
-        //    change action to be 'Remove" as above
-        // 'Remove' action does
-        //    remove item from cart; descrease cart count
-        //    change action to 'Add to cart'
-
-        let inCartCount:number = 0;
-        for(let i = 0; i < itemCount; i++) {
-            const itemLoc:Locator = await invItemListLoc.nth(i);
     
-            const itemImgLoc:Locator = await itemLoc.locator('img');
-            const itemImgAltAttr = await itemImgLoc.getAttribute('alt');
-           
-            const itemNameLoc:Locator = await itemLoc.locator('div[data-test="inventory-item-name"]');
-            const itemNameText = await itemNameLoc.innerText();
-            
-            const itemPriceLoc:Locator = await itemLoc.locator('div[data-test="inventory-item-price"]')
-            const itemPriceText = await itemPriceLoc.innerText();
-            console.log(`item ${i+1}: name=${itemNameText}; price=${itemPriceText};`);
-            expect(itemImgAltAttr).toBe(itemNameText)
-           
-            const itemDescLoc:Locator = await itemLoc.locator('div[data-test="inventory-item-desc"]');
-            const itemDescText = await itemDescLoc.innerText();
-            console.log(`item ${i+1}: desc=${itemDescText}`);
-           
-            const itemActLoc:Locator = await itemLoc.locator('button');
-            if ((i+1) % 3  == 0) {
-                await itemActLoc.click()
-            }
-            const itemActText = await itemActLoc.innerText();
-            console.log(`item ${i+1} action=${itemActText}`)
-            
-            const itemActClassAttr = await itemActLoc.getAttribute('class');
-            if (itemActClassAttr?.includes(' btn_primary ')) {
-                expect(itemActText).toBe('Add to cart')
-            } else {
-                inCartCount++;
-                expect(itemActClassAttr).toContain(' btn_secondary ')
-                expect(itemActText).toBe('Remove')
-            }
-        }
-        console.log(`Cart Count in=${inCartCount}; out=${itemCount - inCartCount}`)
+        const itemCount = await inventoryPage.invItemCount();
+        const inCartCount:number = await inventoryPage.selectItems(2);
+        const prodCartText = `${inCartCount}`
 
-        // compare to remove item count with prod-cart-icon value
-        const prodCartText = await prodCartGroup.innerText();
-        console.log(`Prod Cart Text ${prodCartText};`)
-        if (inCartCount > 0) {
-            expect(Number(prodCartText)).toBe(inCartCount);
-        } else {
-            expect(prodCartText).toBe('');
-        }
+        await inventoryPage.checkCartCount();
 
-        // go to cart page
-        await prodCartGroup.hover();
-        await prodCartGroup.click();
-        const cartURL:string = page.url();
-        expect(cartURL).toBe(`${defaultURL}cart.html`);
+        await inventoryPage.goToCartPage();
         console.log("Next to Your-Cart page")
 
         const yourCartGroup:Locator = page.locator('div#shopping_cart_container');
@@ -243,7 +128,7 @@ test.describe('Complete Work Flow', () => {
 
         const backTitleLoc:Locator = page.locator('span[data-test="title"]')
         await backTitleLoc.isVisible()
-        const backTitleText:string = await prodTitleLoc.innerText();
+        const backTitleText:string = await backTitleLoc.innerText();
         expect(backTitleText).toBe("Products")
 
         // 'Go to Cart action
@@ -258,7 +143,7 @@ test.describe('Complete Work Flow', () => {
 
         const frwdTitleLoc:Locator = page.locator('span[data-test="title"]')
         await frwdTitleLoc.isVisible()
-        const frwdTitleText:string = await prodTitleLoc.innerText();
+        const frwdTitleText:string = await frwdTitleLoc.innerText();
         expect(frwdTitleText).toBe("Your Cart")
 
         // 'Checkout' action 
@@ -274,7 +159,7 @@ test.describe('Complete Work Flow', () => {
          // check and title text is 'Checkout: Your Information'
          const checkOneTitleLoc:Locator = page.locator('span[data-test="title"]')
          await checkOneTitleLoc.isVisible()
-         const checkOneTitleText:string = await prodTitleLoc.innerText();
+         const checkOneTitleText:string = await checkOneTitleLoc.innerText();
          expect(checkOneTitleText).toBe("Checkout: Your Information")
 
         const checkOneLogoLoc:Locator = page.locator('div.app_logo');
@@ -383,7 +268,7 @@ test.describe('Complete Work Flow', () => {
         // check title text is 'Checkout: Overview'
         const checkTwoTitleLoc:Locator = page.locator('span[data-test="title"]')
         await checkTwoTitleLoc.isVisible()
-        const checkTwoTitleText:string = await prodTitleLoc.innerText();
+        const checkTwoTitleText:string = await checkTwoTitleLoc.innerText();
         expect(checkTwoTitleText).toBe("Checkout: Overview")
 
         const checkTwoLogoLoc:Locator = page.locator('div.app_logo');
@@ -556,7 +441,7 @@ test.describe('Complete Work Flow', () => {
 
         const homeProdTitleLoc:Locator = page.locator('span[data-test="title"]')
         await homeProdTitleLoc.isVisible()
-        const homeProdTitleText:string = await prodTitleLoc.innerText();
+        const homeProdTitleText:string = await homeProdTitleLoc.innerText();
         expect(homeProdTitleText).toBe("Products")
 
         const homeLogoLoc:Locator = page.locator('div.app_logo');

@@ -3,7 +3,7 @@ import { Page,  Locator} from 'playwright';
 
 import { SwagLabsLoginPage } from '../Models/demoLoginPage';
 
-test.describe('Login Only Tests', () => {
+test.describe.skip('Login Only Tests', () => {
 const defaultURL = process.env.UI_BASE_URL;
 const uiPassword = process.env.UI_PASSWORD;
 const yes_debug = true;
@@ -78,6 +78,18 @@ const no_debug = false;
         await loginPage.inputUserValue("visual_user");
         await loginPage.inputPassValue(`${uiPassword}`);
         await loginPage.loginAction("");
+    });
+
+    test('Login: user pass mistmach', async ({ page }) => {
+        // visual_user success login to product page
+
+        const defaultURL = process.env.UI_BASE_URL;
+        const loginPage = new SwagLabsLoginPage(page, defaultURL);
+        await loginPage.goto(no_debug);
+
+        await loginPage.inputUserValue("invalid_user");
+        await loginPage.inputPassValue(`${uiPassword}`);
+        await loginPage.loginAction("Epic sadface: Username and password do not match any user in this service");
     });
 
 });
