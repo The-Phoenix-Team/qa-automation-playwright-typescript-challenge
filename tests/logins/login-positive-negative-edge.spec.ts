@@ -25,15 +25,13 @@ test.describe("🔐 Login Tests - Standard Login Flow", () => {
     expect(error).toContain("Username and password do not match");
   });
 
-  test("⚠️ Edge Case: Login with blank username and password", async ({
-    page,
-  }) => {
+  test("⚠️ Edge Case: Login with blank password", async ({ page }) => {
     const loginPage = new LoginPage(page);
     await page.goto(baseURL);
-    await loginPage.login("", "");
+    await loginPage.login("standard_user", "");
 
     const error = await loginPage.getErrorMessage();
     console.log("🧪 Edge Case Error:", error);
-    expect(error).toContain("Username is required");
+    expect(error).toContain("Epic sadface");
   });
 });

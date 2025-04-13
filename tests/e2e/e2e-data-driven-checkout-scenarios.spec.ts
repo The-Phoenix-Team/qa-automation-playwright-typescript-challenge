@@ -55,7 +55,7 @@ for (let i = 0; i < scenarioConfig.length; i++) {
       await checkoutPage.verifyTotalAmount();
       await checkoutPage.finishCheckout();
       const confirmation = await checkoutPage.getConfirmationMessage();
-      expect(confirmation).toContain("THANK YOU");
+      expect(confirmation).toContain("Thank you for your order!");
       console.log("✅ Checkout completed successfully");
     } else {
       const error = await checkoutPage.getErrorMessage();
