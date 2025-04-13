@@ -28,6 +28,24 @@ export class InventoryPage extends BasePage {
   async goToCart() {
     await this.page.click(".shopping_cart_link");
   }
+  // // ✅ Add inside InventoryPage class
+  // async verifyOnInventoryPage() {
+  //   await expect(this.page).toHaveURL(/\/inventory\.html$/);
+  //   await expect(this.page.locator(".inventory_list")).toBeVisible();
+  // }
+
+  // Sort is bit difficult
+  async sortBy(option: "az" | "za" | "lohi" | "hilo") {
+    const dropdown = this.page.locator("[data-test='product_sort_container']");
+    await dropdown.selectOption(
+      {
+        az: "az",
+        za: "za",
+        lohi: "lohi",
+        hilo: "hilo",
+      }[option]
+    );
+  }
 
   // Verify product cards on page match expected data
   async verifyProductDataMatches() {
