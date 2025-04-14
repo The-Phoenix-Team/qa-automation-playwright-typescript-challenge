@@ -102,7 +102,7 @@ test.describe('Complete Work Flow', () => {
 
         // check back on Login Page 
         console.log("Loggout, so on Login Page")
-        loginPage.checkInitLoginFields();
+        await loginPage.checkInitLoginFields();
 
     });
  
