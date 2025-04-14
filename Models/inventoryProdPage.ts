@@ -7,8 +7,7 @@ export class SwagLabsInventoryPage extends SwagLabsBaseProdPage {
 
     // inventory locators and counts
     private _itemListLoc:Locator; // inventory item list 
-    private _itemCount:number;
-
+    private _itemCount:number; // inventory list count
 
     // inventory expected value
 
@@ -21,23 +20,26 @@ export class SwagLabsInventoryPage extends SwagLabsBaseProdPage {
         this._expPathHtml = "inventory.html"
 
         // set invetory page locators
-        this._itemListLoc = page.locator('div[data-test="inventory-item"]');
+        this._itemListLoc = this.page.locator('div[data-test="inventory-item"]');
 
         // set initial values
         this._itemCount = 0
     }
-    async invItemCount():Promise<number> {
-        this._itemCount = await this._itemListLoc.count()
-        console.log(`Inventory has ${this._itemCount} products`);
-        expect(this._itemCount).toBeGreaterThan(0);
-        return this._itemCount;
-    }
 
+    // TODO method that just walks through items
+    // TODO method that just adds item(s) to cart
+    // TODO method that just removes item(s) from cart
+    // Instead of this method that walks through and adds to cart
     async selectItems(
         mod:number // modules to select items add to cart
                    // example 2 add every 2nd item
                    // example 3 add every 3rd item
     ) :Promise<number> {
+
+        this._itemCount = await this._itemListLoc.count()
+        console.log(`Inventory has ${this._itemCount} products`);
+        expect(this._itemCount).toBeGreaterThan(0);
+
         // Each Inventory Item has
         // sub-item img via 'img.inventory_item_img'
         //   with alt value as <product name>

@@ -3,7 +3,7 @@ import { Page,  Locator} from 'playwright';
 
 import { SwagLabsLoginPage } from '../Models/demoLoginPage';
 
-test.describe.skip('Login Only Tests', () => {
+test.describe('Login Only Tests', () => {
 const defaultURL = process.env.UI_BASE_URL;
 const uiPassword = process.env.UI_PASSWORD;
 const yes_debug = true;

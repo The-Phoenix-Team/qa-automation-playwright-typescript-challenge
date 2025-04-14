@@ -1,11 +1,15 @@
 import { Page,  Locator} from 'playwright';
 import { expect } from '@playwright/test';
 
+import {SwagLabsBaseProdPage} from './baseProdPage';
+
 export class SwagLabsLoginPage {
 
     private readonly page: Page;
 
     private _baseURL;
+
+    private _baseProdPage;
 
     // locators
     private _titleLoc:Locator // Application Title
@@ -33,19 +37,21 @@ export class SwagLabsLoginPage {
         console.log(`URL - ${this._baseURL}`);
 
         // Locators
-        this._titleLoc = page.locator('div.login_logo');
-        this._usernameLoc = page.locator('input[data-test="username"]');
-        this._passwordLoc = page.locator('input[data-test="password"]');
-        this._errorLoc = page.locator('div[class*="error-message-container"]');
+        this._titleLoc = this.page.locator('div.login_logo');
+        this._usernameLoc = this.page.locator('input[data-test="username"]');
+        this._passwordLoc = this.page.locator('input[data-test="password"]');
+        this._errorLoc = this.page.locator('div[class*="error-message-container"]');
         this._errMsgLoc = this._errorLoc.locator('h3[data-test="error"]')
         this._errBtnLoc = this._errorLoc.locator('button[data-test="error-button"]')
-        this._loginBtnLoc = page.locator('input[data-test="login-button"]');
+        this._loginBtnLoc = this.page.locator('input[data-test="login-button"]');
 
         // expected text values
         this._expTitleText = "Swag Labs";
         this._expUserPlace = "Username";
         this._expPassPlace = "Password";
         this._expBtnText = "Login";
+
+        this._baseProdPage = new SwagLabsBaseProdPage(page, baseURL);
 
     }
     async goto(debug?:boolean):Promise<void> {
@@ -63,6 +69,11 @@ export class SwagLabsLoginPage {
         await this._errorLoc.isVisible();
         await this._loginBtnLoc.isVisible();
 
+        await this.checkInitLoginFields();
+     
+    }
+
+    async checkInitLoginFields():Promise<void> {
         // check page title text 
         const titleText:string = await this._titleLoc.innerText();
         expect(titleText).toBe(this._expTitleText);
@@ -78,7 +89,6 @@ export class SwagLabsLoginPage {
         // check login button text
         const btnText = await this._loginBtnLoc.getAttribute("value")
         expect(btnText).toBe(this._expBtnText);
-     
     }
 
     async inputUserValue(username:string):Promise<void> {
@@ -116,12 +126,13 @@ export class SwagLabsLoginPage {
         //  and on Invetory Page
         //  and return true
         if (expErrMsg === "") {
+          
             const productURL:string = this.page.url();
-            expect(productURL).toBe(`${this._baseURL}inventory.html`);
+            expect(productURL).toBe(`${this._baseURL}${this._baseProdPage.getInvtPathHtml()}`);
             console.log(`Login ${userValue} to Product-Invetory page`);
             return true;
         }
-        // else Login Success
+        // else Login Failure
         // check error message
         // return false
         await this._errMsgLoc.isVisible()
