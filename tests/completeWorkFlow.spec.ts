@@ -9,16 +9,13 @@ import { SwagLabsCheckTwoPage } from '../Models/checkTwoProdPage';
 import { SwagLabsCheckDonePage } from '../Models/checkDoneProdPage';
 
 test.describe('Complete Work Flow', () => {
-    test('standard_user Checkout Product Logout', async ({ page }) => {
-        
-        // Note this has inline locators that will be used to create
-        // TODO create Page and Object Models for other tests
-        // TODO replace inline locators with Models 
-      
+    test('standard_user Product Select Checkout Logout', async ({ page }) => {
+              
         const defaultURL = process.env.UI_BASE_URL;
         const uiPassword = process.env.UI_PASSWORD;
         const no_debug = false;
 
+        console.log("Standard User Login")
         const loginPage = new SwagLabsLoginPage(page, defaultURL);
         await loginPage.goto(no_debug);
 
@@ -32,6 +29,7 @@ test.describe('Complete Work Flow', () => {
         await inventoryPage.checkStandardFields();
         await inventoryPage.checkCartCount();
     
+        // Select every other item
         const selectModulus:number = 2
         const invtCartCount:number = await inventoryPage.selectItems(selectModulus);
         await inventoryPage.checkCartCount();
@@ -39,17 +37,18 @@ test.describe('Complete Work Flow', () => {
         await inventoryPage.goToCartPage();
         console.log("Next to Your-Cart page")
 
+        // review select item - keep them all
         const yourCartPage = new SwagLabsYourCartPage(page, defaultURL, invtCartCount);
         await yourCartPage.checkStandardFields();
         await yourCartPage.checkCartCount();
         const yourCartCount:number = await yourCartPage.reviewCartItems();
 
-        // 'Continue Shopping' action
+        // see if want more items via 'Continue Shopping' action
         await yourCartPage.clickContShopAct();
         console.log("Back to Product-Invetory page")
         await inventoryPage.checkStandardFields();
 
-        // Inventory page Go to Cart Page
+        // On Inventory pag - No more items so back to Cart Page
         await inventoryPage.goToCartPage();
         console.log("Forward to Your-Chart page")
         await yourCartPage.checkStandardFields();
@@ -79,9 +78,7 @@ test.describe('Complete Work Flow', () => {
         const isOnNextPage = await checkoutOnePage.clickContinueAct("");
         expect(isOnNextPage).toBeTruthy();
 
-        // check on checkout overview page url (step-two)
-         const checkTwoURL:string = page.url();
-        expect(checkTwoURL).toBe(`${defaultURL}checkout-step-two.html`);
+        // check on checkout overview (step two)
         console.log(`Checkout OverView Page- cart ${yourCartCount} items`);
         const checkoutTwoPage = new SwagLabsCheckTwoPage(page, defaultURL, yourCartCount);
         await checkoutTwoPage.checkStandardFields();
@@ -97,7 +94,7 @@ test.describe('Complete Work Flow', () => {
         await checkoutDonePage.checkCartCount();
         await checkoutDonePage.clickBackHomeAct();
       
-        // check Home on Product Inventory Page 
+        // Back Home on Product Inventory Page 
         console.log("Back Home to Product-Invetory page")
         await inventoryPage.checkStandardFields();
         await inventoryPage.checkMenuActions();
